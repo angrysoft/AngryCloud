@@ -1,0 +1,12 @@
+{
+  "cSpell.words": [
+    "angrycloud",
+    "datasource",
+    "flywaydb",
+    "jdbc",
+    "modulith",
+    "springframework"
+  ],
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.compile.nullAnalysis.mode": "automatic"
+}
