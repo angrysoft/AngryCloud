@@ -13,4 +13,6 @@ interface FolderRepository extends CrudRepository<Folder, UUID> {
 
     Optional<Folder> findByIdAndTypeAndOwner(UUID folderId, String type, String owner);
 
+    boolean existsByNameAndParentAndOwner(String name, UUID parent, String username);
+
 }

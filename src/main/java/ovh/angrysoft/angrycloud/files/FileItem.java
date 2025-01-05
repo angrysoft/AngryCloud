@@ -1,5 +1,6 @@
 package ovh.angrysoft.angrycloud.files;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
@@ -98,6 +99,20 @@ class FileItem {
 
     public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof FileItem))
+            return false;
+        final FileItem fileItem = (FileItem) obj;
+        return name.equals(fileItem.getName()) && parent.equals(fileItem.getParent())
+                && type.equals(fileItem.getType()) && owner.equals(fileItem.getOwner());
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode() + parent.hashCode() + type.hashCode() + owner.hashCode();
     }
 
 }

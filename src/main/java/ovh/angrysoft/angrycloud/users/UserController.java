@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +56,13 @@ class UserController {
         UserDetails userDetails = User.withUsername(user.username()).password(user.password())
                 .passwordEncoder(passwordEncoder::encode).roles(user.role()).build();
         userDetailsManager.createUser(userDetails);
+        return RestResponse.statusOk();
+    }
+
+    @DeleteMapping("/user/account")
+    RestResponse<String> removeOwnAccount(Authentication authentication) {
+        var user = (User) authentication.getPrincipal();
+        userDetailsManager.deleteUser(user.getUsername());
         return RestResponse.statusOk();
     }
 
