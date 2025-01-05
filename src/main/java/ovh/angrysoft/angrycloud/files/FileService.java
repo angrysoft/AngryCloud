@@ -3,6 +3,10 @@ package ovh.angrysoft.angrycloud.files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.core.Authentication;
@@ -63,8 +67,10 @@ class FileService {
             throw new StorageException("Folder already exist");
         }
 
-        var folderPath = getFolderPath(parent, Optional.empty());
+        var folderPath = getFolderPath(parent);
+
         var newDirName = makeFolderName(name);
+
         storage.createFolder(folderPath, newDirName);
         var folder = new Folder();
         folder.setOwner(user.getUsername());
@@ -74,12 +80,20 @@ class FileService {
         return folderRepository.save(folder);
     }
 
+    Path getFolderPath(UUID folderId) {
+        var path = Path.of("");
+        for (var p : getFolderList(folderId).reversed()) {
+            path = path.resolve(p);
+        }
+        return path;
+    }
 
-    public Path getFolderPath(UUID folderId, Optional<Path> path) {
+    List<String> getFolderList(UUID folderId) {
         var folder = folderRepository.findById(folderId).orElseThrow();
-        Path result = path.orElse(Path.of(folder.getName()));
+        List<String> result = new ArrayList<>();
+        result.add(folder.getName());
         if (folder.getParent() != null) {
-            return result.resolve(getFolderPath(folder.getId(), Optional.of(result)));
+            result.addAll(getFolderList(folder.getParent()));
         }
 
         return result;
@@ -91,9 +105,14 @@ class FileService {
         Assert.notNull(files, "Brak plików do zapisania");
 
         var folder = folderRepository.findById(folderId).orElseThrow();
+        var path = getFolderPath(folder.getId());
         for (MultipartFile fileToSave : files) {
             Assert.isInstanceOf(MultipartFile.class, fileToSave);
-            // TODO
+            var fileName = makeFolderName(fileToSave.getName());
+            if (folder.hasFileWithName(fileName)) {
+                
+            }
+            storage.uploadFile(fileToSave, fileName, path);
         }
 
         folderRepository.save(folder);

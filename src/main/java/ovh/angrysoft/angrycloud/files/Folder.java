@@ -25,4 +25,9 @@ class Folder extends FileItem {
         this.children = children;
     }
 
+    public boolean hasFileWithName(String fileName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasFileWithName'");
+    }
+
 }
