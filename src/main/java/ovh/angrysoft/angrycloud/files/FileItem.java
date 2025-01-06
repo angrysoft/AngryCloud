@@ -1,6 +1,5 @@
 package ovh.angrysoft.angrycloud.files;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;

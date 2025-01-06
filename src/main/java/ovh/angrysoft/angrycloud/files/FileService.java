@@ -105,12 +105,13 @@ class FileService {
         Assert.notNull(files, "Brak plików do zapisania");
 
         var folder = folderRepository.findById(folderId).orElseThrow();
+        
         var path = getFolderPath(folder.getId());
         for (MultipartFile fileToSave : files) {
             Assert.isInstanceOf(MultipartFile.class, fileToSave);
             var fileName = makeFolderName(fileToSave.getName());
             if (folder.hasFileWithName(fileName)) {
-                
+                //TODO
             }
             storage.uploadFile(fileToSave, fileName, path);
         }

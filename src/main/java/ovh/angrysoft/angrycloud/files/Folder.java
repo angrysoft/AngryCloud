@@ -26,8 +26,7 @@ class Folder extends FileItem {
     }
 
     public boolean hasFileWithName(String fileName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hasFileWithName'");
+        return this.children.stream().anyMatch((child-> child.getName().equals(fileName)));
     }
 
 }
