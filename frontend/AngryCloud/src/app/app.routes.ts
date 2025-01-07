@@ -13,4 +13,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./root/root.component').then((m) => m.RootComponent),
   },
+  {
+    path: 'root/:folder',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./root/root.component').then((m) => m.RootComponent),
+  },
 ];
