@@ -1,21 +1,17 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, signal } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { RestResponse } from '../models/rest-response';
 import { User } from '../models/user';
+import { CrudService } from './crud.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
-  http = inject(HttpClient);
+export class AuthService extends CrudService<User> {
   user = signal<User | null>(null);
-  router = inject(Router);
 
   getUser() {
-    this.http
-      .get<RestResponse<User>>('/api/user/whoami', { withCredentials: true })
+    this._get<RestResponse<User>>('/api/user/whoami', { withCredentials: true })
       .pipe(
         catchError((err) => {
           if (err.status === 401) {
@@ -39,16 +35,12 @@ export class AuthService {
     const loginFormData = new FormData();
     loginFormData.set('username', username);
     loginFormData.set('password', password);
-    return this.http.post<RestResponse<User>>(
-      '/api/user/login',
-      loginFormData,
-      { withCredentials: true }
-    );
+    return this._post<FormData>('/api/user/login', loginFormData);
   }
 
   logout() {
     this.user.set(null);
-    return this.http.post('/api/user/logout', null, { withCredentials: true });
+    return this._post('/api/user/logout', null);
   }
 
   setUser(user: User) {
@@ -57,5 +49,11 @@ export class AuthService {
 
   get isAuthenticated() {
     return this.user() !== null;
+  }
+
+  changePassword(
+    payload: Partial<{ password: string | null; password2: string | null }>
+  ) {
+    return this._put(`/api/user/change-password`, payload);
   }
 }

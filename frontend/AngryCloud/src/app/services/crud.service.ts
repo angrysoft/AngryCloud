@@ -91,9 +91,9 @@ export class CrudService<T> {
   protected _post<GT>(
     api: string,
     data: GT | null = null
-  ): Observable<RestResponse<string>> {
+  ): Observable<RestResponse<T | string>> {
     return this.http
-      .post<RestResponse<string>>(api, data, {
+      .post<RestResponse<T | string>>(api, data, {
         withCredentials: true,
       })
       .pipe(catchError(this.handleError.bind(this)));
