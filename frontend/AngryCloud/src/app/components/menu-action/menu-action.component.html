@@ -1,9 +1,8 @@
-<mat-list-item
-  #rla="routerLinkActive"
-  [activated]="rla.isActive"
-  routerLinkActive
+<a mat-button
+  class="menu-item"
+  routerLinkActive="active-menu"
   routerLink="{{ href() }}"
 >
   <mat-icon matListItemIcon>{{ icon() }}</mat-icon>
   <ng-content></ng-content>
-</mat-list-item>
+</a>

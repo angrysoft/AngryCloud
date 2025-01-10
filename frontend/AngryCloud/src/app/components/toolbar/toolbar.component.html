@@ -1,0 +1,13 @@
+<mat-form-field appearance="outline" class="search">
+  <mat-label>Search</mat-label>
+  <input matInput type="search" />
+</mat-form-field>
+<div class="spacer"></div>
+<button mat-icon-button [matMenuTriggerFor]="menuSetting" title="settings"><mat-icon>settings</mat-icon></button>
+<mat-menu #menuSetting="matMenu">
+  <button mat-menu-item>Theme Setting</button>
+</mat-menu>
+<button mat-icon-button [matMenuTriggerFor]="menuPerson" title="{{username()}}"><mat-icon>person</mat-icon></button>
+<mat-menu #menuPerson="matMenu">
+  <button mat-menu-item>Logout</button>
+</mat-menu>

@@ -1,9 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, catchError, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, Observable, of } from 'rxjs';
 import { RestResponse } from '../models/rest-response';
 
 
@@ -15,7 +14,7 @@ export class CrudService<T> {
   private apiUrl = '';
   private readonly _snackBar = inject(MatSnackBar);
   router = inject(Router);
-  auth = inject(AuthService);
+  // auth = inject(AuthService);
 
   set api(apiUrl: string) {
     this.apiUrl = apiUrl;
@@ -132,7 +131,7 @@ export class CrudService<T> {
   protected handleError(err: any) {
     if (err.status === 401) {
       // FIXME: wszystkie serwisy powinny obsłużyć on destroy !?
-      this.auth.logout();
+      // this.auth.logout();
     } else if (err.status === 413) {
       err.error.data = 'Za duży plik';
     }

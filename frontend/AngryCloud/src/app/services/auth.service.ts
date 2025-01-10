@@ -24,6 +24,7 @@ export class AuthService extends CrudService<User> {
         })
       )
       .subscribe((resp) => {
+        console.log("wtf")
         if (resp.ok) {
           this.user.set(resp.data);
           this.router.navigateByUrl('/root');
@@ -49,6 +50,10 @@ export class AuthService extends CrudService<User> {
 
   get isAuthenticated() {
     return this.user() !== null;
+  }
+
+  get username() {
+    return this.user()?.username ?? "";
   }
 
   changePassword(

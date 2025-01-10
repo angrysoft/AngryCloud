@@ -1,6 +1,9 @@
-.menu-action {
-    display: flex;
-    padding: 1rem;
-    gap: 1rem;
-    text-decoration: none;
+.menu-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+}
+
+.active-menu {
+    background-color: var(--mat-sys-surface-container);
 }

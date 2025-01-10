@@ -1,0 +1,14 @@
+:host {
+    display: grid;
+    height: 100%;
+    grid-template-columns: auto 1fr;
+}
+
+.main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.new-btn {
+    margin-bottom: 2rem;
+}

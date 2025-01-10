@@ -18,6 +18,5 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
 })
 export class MenuActionComponent {
   readonly href = input<string>("");
-
   readonly icon = input<string>("");
 }
