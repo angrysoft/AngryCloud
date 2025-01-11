@@ -1,0 +1,13 @@
+<div class="row header">
+  <div>Name</div>
+  <div>Owner</div>
+  <div>Date</div>
+  <div>Size</div>
+</div>
+@for (file of files(); track file.id) {
+  @if(file.type === "FOLDER") {
+  <app-folder [data]="file" />
+  } @else {
+  <app-file [data]="file" />
+  }
+}

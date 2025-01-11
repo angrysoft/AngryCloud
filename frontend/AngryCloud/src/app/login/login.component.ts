@@ -15,9 +15,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../services/auth.service';
-import { LoginForm } from '../models/user';
+import { LoginForm, User } from '../models/user';
 import { Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -51,14 +51,9 @@ export class LoginComponent implements OnInit {
     const values = this.loginForm.value;
     this.auth
       .login(values.username ?? '', values.password ?? '')
-      .pipe(
-        catchError((arg) => {
-          return of(arg);
-        })
-      )
       .subscribe((resp) => {
         if (resp.ok) {
-          this.auth.setUser(resp.data);
+          this.auth.setUser(resp.data as User);
           this.router.navigateByUrl('/root');
         } else {
           console.log('login error');

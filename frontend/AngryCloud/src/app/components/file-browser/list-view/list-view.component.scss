@@ -1,0 +1,18 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 1fr;
+    width: 100%;
+    padding: 1rem;
+    border-bottom: 1px solid var(--mat-sys-outline);
+}
+
+.header {
+    border-bottom: 2px solid var(--mat-sys-outline);
+    font-weight: bold;
+}

@@ -33,7 +33,7 @@ class SecurityConfig {
                         .permitAll().anyRequest().authenticated())
                 .formLogin(form -> form.loginProcessingUrl("/api/user/login")
                         .defaultSuccessUrl("/api/user/whoami", true)
-                        .failureUrl("/api/user/login_failed"))
+                        .failureUrl("/api/user/login_failed").permitAll())
                 // .failureHandler(authenticationFailureHandler()))
                 // .successHandler(authenticationSuccessHandler()))
                 .logout(logout -> logout.logoutUrl("/api/user/logout")

@@ -29,14 +29,14 @@ class FilesController {
     }
 
 
-    @GetMapping
-    public Folder getRoot() {
-        return fileService.getRoot();
+    @GetMapping(value = {"", "/"})
+    public RestResponse<Folder> getRoot() {
+        return new RestResponse<>(fileService.getRoot());
     }
 
     @GetMapping("/{folderId}")
-    public Folder getFolder(@PathVariable UUID folderId) {
-        return fileService.getFolder(folderId);
+    public RestResponse<Folder> getFolder(@PathVariable UUID folderId) {
+        return new RestResponse<>(fileService.getFolder(folderId));
     }
 
     @PostMapping("/{folderId}")

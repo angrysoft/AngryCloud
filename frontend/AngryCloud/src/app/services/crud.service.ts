@@ -130,8 +130,7 @@ export class CrudService<T> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected handleError(err: any) {
     if (err.status === 401) {
-      // FIXME: wszystkie serwisy powinny obsłużyć on destroy !?
-      // this.auth.logout();
+      this.router.navigateByUrl("/login")
     } else if (err.status === 413) {
       err.error.data = 'Za duży plik';
     }

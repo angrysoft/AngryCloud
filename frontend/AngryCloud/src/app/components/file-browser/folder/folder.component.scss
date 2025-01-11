@@ -1,0 +1,14 @@
+:host {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 4fr 1fr 1fr 1fr;
+    padding: 1rem;
+    border-bottom: 1px solid var(--mat-sys-outline);
+    cursor: pointer;
+}
+
+.name {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

@@ -1,5 +1,4 @@
 import { Injectable, signal } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
 import { RestResponse } from '../models/rest-response';
 import { User } from '../models/user';
 import { CrudService } from './crud.service';
@@ -11,25 +10,14 @@ export class AuthService extends CrudService<User> {
   user = signal<User | null>(null);
 
   getUser() {
-    this._get<RestResponse<User>>('/api/user/whoami', { withCredentials: true })
-      .pipe(
-        catchError((err) => {
-          if (err.status === 401) {
-            this.router.navigateByUrl('/login');
-            return new Observable<RestResponse<User>>();
-          }
-          return throwError(
-            () => new Error('Something bad happened; please try again later.')
-          );
-        })
-      )
-      .subscribe((resp) => {
-        console.log("wtf")
-        if (resp.ok) {
-          this.user.set(resp.data);
-          this.router.navigateByUrl('/root');
-        }
-      });
+    this._get<RestResponse<User>>('/api/user/whoami', {
+      withCredentials: true,
+    }).subscribe((resp) => {
+      if (resp.ok) {
+        this.user.set(resp.data);
+        this.router.navigateByUrl('/root');
+      }
+    });
   }
 
   login(username: string, password: string) {
@@ -53,7 +41,7 @@ export class AuthService extends CrudService<User> {
   }
 
   get username() {
-    return this.user()?.username ?? "";
+    return this.user()?.username ?? '';
   }
 
   changePassword(

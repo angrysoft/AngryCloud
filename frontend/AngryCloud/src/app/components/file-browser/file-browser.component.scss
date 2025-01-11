@@ -1,8 +1,10 @@
 :host {
-    padding: 0 1rem 1rem 1rem;
+    padding: 1rem;
+    overflow: hidden;
 }
 
 .browser {
     height: 100%;
-    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--mat-sys-surface-container);
 }
