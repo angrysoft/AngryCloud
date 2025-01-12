@@ -1,25 +1,30 @@
-import { Directive, HostListener, output, signal } from '@angular/core';
+import { Directive, HostListener, input, output, signal } from '@angular/core';
+import { FileItem } from '../models/files';
 
 @Directive({
   selector: '[appFileEvents]',
 })
 export class FileEventsDirective {
-  action = output<string>();
+  action = output<{ action: string; file: FileItem }>();
+  file = input.required<FileItem>();
   preventSingleClick = signal<boolean>(false);
 
-  @HostListener('click')
-  onClick() {
+  @HostListener('click', ['$event'])
+  onClick(ev: MouseEvent) {
     this.preventSingleClick.set(false);
     setTimeout(() => {
-      if (!this.preventSingleClick()) this.action.emit('select');
+      if (!this.preventSingleClick()) {
+        let actionType = 'select';
+        if (ev.ctrlKey && !ev.shiftKey) actionType = 'select-add';
+        else if (!ev.ctrlKey && ev.shiftKey) actionType = 'select-list';
+        this.action.emit({ action: actionType, file: this.file() });
+      }
     }, 500);
   }
-
-  @HostListener('window:keydown')
 
   @HostListener('dblclick')
   onDblClick() {
     this.preventSingleClick.set(true);
-    console.log("open");
+    this.action.emit({ action: "open", file: this.file() });
   }
 }

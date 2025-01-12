@@ -4,10 +4,20 @@
   <div>Date</div>
   <div>Size</div>
 </div>
-@for (file of files(); track file.id) {
-  @if(file.type === "FOLDER") {
-  <app-folder [data]="file" appFileEvents (action)="dispatchAction($event)"/>
-  } @else {
-  <app-file [data]="file" />
-  }
-}
+@for (file of files(); track file.id) { @if(file.type === "FOLDER") {
+<app-folder
+  [data]="file"
+  appFileEvents
+  [file]="file"
+  (action)="dispatchAction($event)"
+  [class]="selection.isSelected(file) ? 'selected' : ''"
+/>
+} @else {
+<app-file
+  [data]="file"
+  appFileEvents
+  [file]="file"
+  (action)="dispatchAction($event)"
+  [class]="selection.isSelected(file) ? 'selected' : ''"
+/>
+} }
