@@ -12,14 +12,18 @@ export class FileEventsDirective {
   @HostListener('click', ['$event'])
   onClick(ev: MouseEvent) {
     this.preventSingleClick.set(false);
-    setTimeout(() => {
-      if (!this.preventSingleClick()) {
-        let actionType = 'select';
-        if (ev.ctrlKey && !ev.shiftKey) actionType = 'select-add';
-        else if (!ev.ctrlKey && ev.shiftKey) actionType = 'select-list';
-        this.action.emit({ action: actionType, file: this.file() });
-      }
-    }, 500);
+    // setTimeout(() => {
+    //   if (!this.preventSingleClick()) {
+    //     let actionType = 'select';
+    //     if (ev.ctrlKey && !ev.shiftKey) actionType = 'select-add';
+    //     else if (!ev.ctrlKey && ev.shiftKey) actionType = 'select-list';
+    //     this.action.emit({ action: actionType, file: this.file() });
+    //   }
+    // }, 300);
+    let actionType = 'select';
+    if (ev.ctrlKey && !ev.shiftKey) actionType = 'select-add';
+    else if (!ev.ctrlKey && ev.shiftKey) actionType = 'select-list';
+    this.action.emit({ action: actionType, file: this.file() });
   }
 
   @HostListener('dblclick')
