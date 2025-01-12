@@ -3,11 +3,11 @@ import { MatCardModule } from '@angular/material/card';
 import { FileItem } from '../../models/files';
 import { FilesService } from '../../services/files.service';
 import { FileToolbarComponent } from './file-toolbar/file-toolbar.component';
-import { ListViewComponent } from './list-view/list-view.component';
+import { FileViewComponent } from "./file-view/file-view.component";
 
 @Component({
   selector: 'app-file-browser',
-  imports: [MatCardModule, FileToolbarComponent, ListViewComponent],
+  imports: [MatCardModule, FileToolbarComponent, FileViewComponent],
   templateUrl: './file-browser.component.html',
   styleUrl: './file-browser.component.scss',
 })

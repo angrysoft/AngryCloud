@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.auth.isAuthenticated) this.router.navigateByUrl('/root');
+    if (this.auth.isAuthenticated) this.router.navigateByUrl('/folder');
   }
 
   login() {
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
       .subscribe((resp) => {
         if (resp.ok) {
           this.auth.setUser(resp.data as User);
-          this.router.navigateByUrl('/root');
+          this.router.navigateByUrl('/folder');
         } else {
           console.log('login error');
           this.loginForm.setErrors({ loginError: true });

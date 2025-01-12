@@ -15,7 +15,7 @@ export class AuthService extends CrudService<User> {
     }).subscribe((resp) => {
       if (resp.ok) {
         this.user.set(resp.data);
-        this.router.navigateByUrl('/root');
+        this.router.navigateByUrl('/folder');
       }
     });
   }

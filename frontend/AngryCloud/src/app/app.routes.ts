@@ -8,13 +8,13 @@ export const routes: Routes = [
       import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
-    path: 'root',
+    path: 'folder',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./root/root.component').then((m) => m.RootComponent),
   },
   {
-    path: 'root/:folder',
+    path: 'folder/:folder',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./root/root.component').then((m) => m.RootComponent),
