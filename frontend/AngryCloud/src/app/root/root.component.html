@@ -1,13 +1,16 @@
 <app-side-menu>
-    <button mat-fab extended class="new-btn">
-        <mat-icon>add</mat-icon>
-        Nowy
-    </button>
-    <app-menu-action href="/root" icon="home">Home</app-menu-action>
-    <app-menu-action href="/photo" icon="photo">Photo</app-menu-action>
-    <app-menu-action href="/trash" icon="delete">Trash</app-menu-action>
+  <button mat-fab extended class="new-btn">
+    <mat-icon>add</mat-icon>
+    Nowy
+  </button>
+  <app-menu-action href="/root" icon="home">Home</app-menu-action>
+  <app-menu-action href="/photo" icon="photo">Photo</app-menu-action>
+  <app-menu-action href="/trash" icon="delete">Trash</app-menu-action>
 </app-side-menu>
 <main class="main">
-    <app-toolbar [username]="auth.username"/>
-    <app-file-browser />
+  <app-toolbar [username]="auth.username" />
+  <router-outlet />
 </main>
+<mat-menu #menuPerson="matMenu">
+  <button mat-menu-item>Logout</button>
+</mat-menu>

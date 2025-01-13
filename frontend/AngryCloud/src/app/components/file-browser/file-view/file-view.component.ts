@@ -1,10 +1,19 @@
-import { Component, HostListener, input } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import {
+  Component,
+  HostListener,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FileEventsDirective } from '../../../directive/file-events.directive';
 import { FileItem } from '../../../models/files';
+import { FilesService } from '../../../services/files.service';
 import { FileComponent } from '../file/file.component';
 import { FolderComponent } from '../folder/folder.component';
-import { SelectionModel } from '@angular/cdk/collections';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-file-view',
@@ -13,14 +22,18 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrl: './file-view.component.scss',
 })
 export class FileViewComponent {
+  router = inject(Router);
+  service = inject(FilesService);
+  path = output<{ name: string; id: string }[]>();
   files = input.required<FileItem[]>();
-  displayedColumns = ['name', 'owner', 'date', 'size'];
   selection = new SelectionModel<FileItem>(true, [], false);
+  loading = signal<boolean>(true);
 
   dispatchAction(action: { action: string; file: FileItem }) {
     console.log('action: ', action);
     switch (action.action) {
       case 'open':
+        this.router.navigateByUrl(`/folder/${action.file.id}`);
         break;
       case 'select':
         this.selection.clear();
@@ -73,7 +86,7 @@ export class FileViewComponent {
       const index: number = this.files().indexOf(
         this.selection.selected.at(-1) as FileItem
       );
-      this.selection.clear()
+      this.selection.clear();
       this.selection.select(this.files().at(index + 1) as FileItem);
     }
   }
@@ -85,6 +98,9 @@ export class FileViewComponent {
 
   @HostListener('window:keydown.enter', ['$event'])
   onOpen() {
-    console.log('open');
+    console.log('open on enter');
+    if (this.selection.selected.length > 1 || this.selection.isEmpty()) return;
+    const id = this.selection.selected.at(0)?.id;
+    this.router.navigateByUrl(`/folder/${id}`);
   }
 }

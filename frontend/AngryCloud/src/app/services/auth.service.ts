@@ -13,6 +13,7 @@ export class AuthService extends CrudService<User> {
     this._get<RestResponse<User>>('/api/user/whoami', {
       withCredentials: true,
     }).subscribe((resp) => {
+      console.log("auth", resp)
       if (resp.ok) {
         this.user.set(resp.data);
         this.router.navigateByUrl('/folder');

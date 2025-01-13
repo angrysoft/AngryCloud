@@ -4,9 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.core.Authentication;
@@ -32,9 +30,11 @@ class FileService {
         Assert.notNull(folderId, "Folder id cannot by empty");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (User) authentication.getPrincipal();
-        return folderRepository
+        var folder = folderRepository
                 .findByIdAndTypeAndOwner(folderId, FileType.FOLDER.name(), user.getUsername())
                 .orElseThrow();
+        folder.setPath(getFolderPathList(folderId).reversed());
+        return folder;
 
     }
 
@@ -56,7 +56,9 @@ class FileService {
                     storage.createFolder(Path.of(""), folder.getName());
                     return Optional.ofNullable(folderRepository.save(folder));
                 });
-        return root.orElseThrow();
+        var rootFolder = root.orElseThrow();
+        rootFolder.setPath(List.of(new PathItem(rootFolder.getName(), "")));
+        return rootFolder;
     }
 
     @Transactional
@@ -99,19 +101,31 @@ class FileService {
         return result;
     }
 
+    List<PathItem> getFolderPathList(UUID folderId) {
+        var folder = folderRepository.findById(folderId).orElseThrow();
+        List<PathItem> result = new ArrayList<>();
+        result.add(new PathItem(folder.getName(), folder.getId()));
+        if (folder.getParent() != null) {
+            result.addAll(getFolderPathList(folder.getParent()));
+        }
+
+        return result;
+    }
+
+
 
     public void sendFiles(UUID folderId, MultipartFile[] files) {
         Assert.notNull(folderId, "folderId cannot by empty");
         Assert.notNull(files, "Brak plików do zapisania");
 
         var folder = folderRepository.findById(folderId).orElseThrow();
-        
+
         var path = getFolderPath(folder.getId());
         for (MultipartFile fileToSave : files) {
             Assert.isInstanceOf(MultipartFile.class, fileToSave);
             var fileName = makeFolderName(fileToSave.getName());
             if (folder.hasFileWithName(fileName)) {
-                //TODO
+                // TODO
             }
             storage.uploadFile(fileToSave, fileName, path);
         }

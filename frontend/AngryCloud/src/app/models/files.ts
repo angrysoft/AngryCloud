@@ -5,6 +5,7 @@ interface FileItem {
   parent: string;
   type: string;
   owner: string;
+  path: {name:string, id:string}[]
   created: string | Date;
   updated: string | Date;
 }

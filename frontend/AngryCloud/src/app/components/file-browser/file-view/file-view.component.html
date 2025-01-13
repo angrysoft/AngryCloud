@@ -1,23 +1,25 @@
-<div class="row header">
-  <div>Name <mat-icon>arrow_upward</mat-icon></div>
-  <div>Owner</div>
-  <div>Date</div>
-  <div>Size</div>
+<div class="file-view">
+  <div class="row header">
+    <div>Name <mat-icon>arrow_upward</mat-icon></div>
+    <div>Owner</div>
+    <div>Date</div>
+    <div>Size</div>
+  </div>
+  @for (file of files(); track file.id) { @if(file.type === "FOLDER") {
+  <app-folder
+    [data]="file"
+    appFileEvents
+    [file]="file"
+    (action)="dispatchAction($event)"
+    [class]="selection.isSelected(file) ? 'selected' : ''"
+  />
+  } @else {
+  <app-file
+    [data]="file"
+    appFileEvents
+    [file]="file"
+    (action)="dispatchAction($event)"
+    [class]="selection.isSelected(file) ? 'selected' : ''"
+  />
+  } }
 </div>
-@for (file of files(); track file.id) { @if(file.type === "FOLDER") {
-<app-folder
-  [data]="file"
-  appFileEvents
-  [file]="file"
-  (action)="dispatchAction($event)"
-  [class]="selection.isSelected(file) ? 'selected' : ''"
-/>
-} @else {
-<app-file
-  [data]="file"
-  appFileEvents
-  [file]="file"
-  (action)="dispatchAction($event)"
-  [class]="selection.isSelected(file) ? 'selected' : ''"
-/>
-} }

@@ -2,11 +2,14 @@
     display: grid;
     height: 100%;
     grid-template-columns: auto 1fr;
+    overflow: hidden;
 }
 
 .main {
-    display: grid;
-    grid-template-rows: auto 1fr;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
 }
 
 .new-btn {

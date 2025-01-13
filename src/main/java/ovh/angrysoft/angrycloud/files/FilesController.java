@@ -22,12 +22,9 @@ import ovh.angrysoft.angrycloud.RestResponse;
 class FilesController {
     FileService fileService;
 
-
-
     public FilesController(FileService fileService) {
         this.fileService = fileService;
     }
-
 
     @GetMapping(value = {"", "/"})
     public RestResponse<Folder> getRoot() {

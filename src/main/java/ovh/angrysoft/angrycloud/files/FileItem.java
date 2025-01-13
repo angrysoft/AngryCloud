@@ -1,8 +1,11 @@
 package ovh.angrysoft.angrycloud.files;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("file")
@@ -17,8 +20,12 @@ class FileItem {
     LocalDateTime created;
     LocalDateTime updated;
 
+    @Transient
+    List<PathItem> path;
 
-    public FileItem() {}
+    public FileItem() {
+        this.path = new ArrayList<>();
+    }
 
 
     public UUID getId() {
@@ -114,4 +121,14 @@ class FileItem {
         return name.hashCode() + parent.hashCode() + type.hashCode() + owner.hashCode();
     }
 
+
+    public List<PathItem> getPath() {
+        return path;
+    }
+
+
+    public void setPath(List<PathItem> dirs) {
+        this.path = dirs;
+    }
 }
+
