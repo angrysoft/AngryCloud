@@ -43,30 +43,52 @@ export class FileViewComponent {
         this.selection.toggle(action.file);
         break;
       case 'select-list':
-        console.log('selection-list');
+        this.selectList(action.file);
         break;
     }
   }
 
+  selectList(file: FileItem) {
+    if (this.selection.isEmpty()) return;
+
+    const firstSelectedFile = this.selection.selected.at(0);
+    const lastSelectedFile = this.selection.selected.at(-1);
+    let lowIdx = -1;
+    let hiIdx = -1;
+    if (firstSelectedFile) lowIdx = this.files().indexOf(firstSelectedFile);
+    if (lastSelectedFile) hiIdx = this.files().indexOf(lastSelectedFile);
+    const clkIdx = this.files().indexOf(file);
+    if (clkIdx < lowIdx) {
+      this.selectRange(clkIdx, lowIdx);
+    } else if (clkIdx > hiIdx) {
+      this.selectRange(hiIdx, clkIdx);
+    }
+  }
+
+  selectRange(from: number, to: number) {
+    this.selection.clear();
+    for (let i = from; i <= to; i++) {
+      this.selection.select(this.files().at(i) as FileItem);
+    }
+  }
+
   @HostListener('window:keydown.arrowup', ['$event'])
-  onArrowUp(ev: KeyboardEvent) {
-    console.log('moveup');
+  onArrowUp() {
+    // ev.preventDefault();
     if (this.files().length == 0) return;
 
     if (this.selection.isEmpty()) {
       this.selection.select(this.files().at(0) as FileItem);
-    } else if (!this.selection.isSelected(this.files().at(0) as FileItem)) {
-      const index: number = this.files().indexOf(
-        this.selection.selected.at(-1) as FileItem
-      );
-      this.selection.clear();
-      this.selection.select(this.files().at(index - 1) as FileItem);
+      return;
     }
-  }
 
-  @HostListener('window:keydown.shift.arrowup', ['$event'])
-  onSelectUp(ev: KeyboardEvent) {
-    console.log('selectup');
+    //FIXME find the highest idx not the last selected
+    const index: number = this.files().indexOf(
+      this.selection.selected.at(0) as FileItem
+    );
+
+    this.selection.clear();
+    this.selection.select(this.files().at(Math.max(index - 1, 0)) as FileItem);
   }
 
   @HostListener('window:keydown.esc')
@@ -76,25 +98,37 @@ export class FileViewComponent {
   }
 
   @HostListener('window:keydown.arrowdown', ['$event'])
-  onArrowDown(ev: KeyboardEvent) {
+  onArrowDown() {
+    // ev.preventDefault();
     console.log('movedown');
     if (this.files().length == 0) return;
 
     if (this.selection.isEmpty()) {
       this.selection.select(this.files().at(0) as FileItem);
-    } else if (!this.selection.isSelected(this.files().at(-1) as FileItem)) {
-      const index: number = this.files().indexOf(
-        this.selection.selected.at(-1) as FileItem
-      );
-      this.selection.clear();
-      this.selection.select(this.files().at(index + 1) as FileItem);
+      return;
     }
+
+    //FIXME find the lowest idx not the last selected
+    const index: number = this.files().indexOf(
+      this.selection.selected.at(-1) as FileItem
+    );
+
+    this.selection.clear();
+    this.selection.select(
+      this.files().at(Math.min(index + 1, this.files().length - 1)) as FileItem
+    );
+  }
+
+  @HostListener('window:keydown.shift.arrowup', ['$event'])
+  onSelectUp() {
+    console.log('selectup');
   }
 
   @HostListener('window:keydown.shift.arrowdown', ['$event'])
-  onSelectDown(ev: KeyboardEvent) {
+  onSelectDown() {
     console.log('selectdown');
   }
+
 
   @HostListener('window:keydown.enter', ['$event'])
   onOpen() {
