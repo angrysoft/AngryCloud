@@ -1,5 +1,5 @@
 <app-side-menu>
-  <button mat-fab extended class="new-btn">
+  <button mat-fab extended [matMenuTriggerFor]="newMenu" class="new-btn">
     <mat-icon>add</mat-icon>
     Nowy
   </button>
@@ -11,6 +11,14 @@
   <app-toolbar [username]="auth.username" />
   <router-outlet />
 </main>
-<mat-menu #menuPerson="matMenu">
-  <button mat-menu-item>Logout</button>
+<mat-menu #newMenu="matMenu">
+  <button mat-menu-item (click)="createFolder()">
+    <mat-icon>create_new_folder</mat-icon>
+    <span>New Folder</span>
+  </button>
+  <mat-divider />
+  <button mat-menu-item>
+    <mat-icon>upload_file</mat-icon>
+    <span>Upload File</span>
+  </button>
 </mat-menu>

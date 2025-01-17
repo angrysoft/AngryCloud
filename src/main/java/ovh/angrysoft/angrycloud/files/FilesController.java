@@ -2,6 +2,7 @@ package ovh.angrysoft.angrycloud.files;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.core.io.Resource;
 import org.springframework.http.InvalidMediaTypeException;
@@ -36,9 +37,9 @@ class FilesController {
         return new RestResponse<>(fileService.getFolder(folderId));
     }
 
-    @PostMapping("/{folderId}")
+    @PostMapping(value ={"/", "/{folderId}"})
     public RestResponse<Folder> createFolder(@RequestBody FolderName name,
-            @PathVariable UUID folderId) {
+            @PathVariable  Optional<UUID> folderId) {
         var folder = fileService.createFolder(name.name(), folderId);
         return new RestResponse<>(folder);
     }

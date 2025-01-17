@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  OnDestroy,
-  signal
-} from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -11,6 +6,7 @@ import { FileItem } from '../../models/files';
 import { FilesService } from '../../services/files.service';
 import { FileToolbarComponent } from './file-toolbar/file-toolbar.component';
 import { FileViewComponent } from './file-view/file-view.component';
+import { EventService } from '../../services/event.service';
 
 @Component({
   selector: 'app-file-browser',
@@ -22,15 +18,24 @@ export class FileBrowserComponent implements OnDestroy {
   path = signal<{ name: string; id: string }[]>([]);
   service = inject(FilesService);
   route = inject(ActivatedRoute);
-  folder = signal<string>(this.route.snapshot.paramMap.get('folder') ?? '');
+  events = inject(EventService);
+  currentFolder = "" 
   files = signal<FileItem[]>([]);
   destroy = new Subject();
 
   constructor() {
     this.route.paramMap.pipe(takeUntil(this.destroy)).subscribe((params) => {
       const id = params.get('folder') ?? '';
+      this.currentFolder = id;
+      this.events.emit({
+        type: 'folderChange',
+        data: id,
+      });
       this.loadFolder(id);
     });
+    this.events.changes().subscribe(e => {
+      if (e.type === "createdNewFolder") this.loadFolder(this.currentFolder);
+    })
   }
 
   ngOnDestroy(): void {

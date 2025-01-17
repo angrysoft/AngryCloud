@@ -129,12 +129,15 @@ export class FileViewComponent {
     console.log('selectdown');
   }
 
-
   @HostListener('window:keydown.enter', ['$event'])
   onOpen() {
     console.log('open on enter');
     if (this.selection.selected.length > 1 || this.selection.isEmpty()) return;
     const id = this.selection.selected.at(0)?.id;
-    this.router.navigateByUrl(`/folder/${id}`);
+    this.router.navigateByUrl(`/folder/${id}`, {
+      state: {
+        folder: id,
+      },
+    });
   }
 }

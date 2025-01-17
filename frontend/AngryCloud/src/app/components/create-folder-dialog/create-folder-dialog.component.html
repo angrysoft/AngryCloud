@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Create Folder</h1>
+<mat-dialog-content>
+  <div  class="dialog">
+    <mat-form-field appearance="outline">
+      <mat-label>Folder Name</mat-label>
+      <input matInput type="text" [formControl]="folderName" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-button
+    [disabled]="!folderName.valid && !folderName.dirty"
+    [mat-dialog-close]="folderName.value"
+  >
+    Create
+  </button>
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+</mat-dialog-actions>

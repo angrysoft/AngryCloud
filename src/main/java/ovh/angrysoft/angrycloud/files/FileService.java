@@ -62,21 +62,29 @@ class FileService {
     }
 
     @Transactional
-    public Folder createFolder(String name, UUID parent) {
+    public Folder createFolder(String name, Optional<UUID> parent) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = (User) authentication.getPrincipal();
-        if (folderRepository.existsByNameAndParentAndOwner(name, parent, user.getUsername())) {
+        var folderParent = parent.orElseGet(() -> {
+            var root = folderRepository
+                    .findByTypeAndOwnerAndParentNull(FileType.FOLDER.name(), user.getUsername())
+                    .orElseThrow();
+            return root.getId();
+        });
+
+        if (folderRepository.existsByNameAndParentAndOwner(name, folderParent,
+                user.getUsername())) {
             throw new StorageException("Folder already exist");
         }
 
-        var folderPath = getFolderPath(parent);
+        var folderPath = getFolderPath(folderParent);
 
         var newDirName = makeFolderName(name);
 
         storage.createFolder(folderPath, newDirName);
         var folder = new Folder();
         folder.setOwner(user.getUsername());
-        folder.setParent(parent);
+        folder.setParent(folderParent);
         folder.setName(newDirName);
         folder.setType(FileType.FOLDER.name());
         return folderRepository.save(folder);
